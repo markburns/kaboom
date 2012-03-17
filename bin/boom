@@ -3,6 +3,6 @@
 
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
-require 'boom'
+require 'kaboom'
 
 Boom::Command.execute(*ARGV)
