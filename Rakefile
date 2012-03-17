@@ -118,7 +118,7 @@ task :gemspec => :validate do
   replace_header(head, :version)
   replace_header(head, :date)
   #comment this out if your rubyforge_project has a different name
-  replace_header(head, :rubyforge_project)
+  #replace_header(head, :rubyforge_project)
 
   # determine file list from git ls-files
   files = `git ls-files`.
