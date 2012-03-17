@@ -30,7 +30,7 @@ require 'kaboom/core_ext/symbol'
 require 'kaboom/remote'
 
 module Boom
-  VERSION = '0.3.1'
+  VERSION = '0.3.2'
 
   extend self
 
