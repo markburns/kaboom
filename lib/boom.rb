@@ -30,7 +30,7 @@ require 'boom/core_ext/symbol'
 require 'boom/remote'
 
 module Boom
-  VERSION = '0.2.3'
+  VERSION = '0.0.1'
 
   extend self
 

@@ -112,7 +112,5 @@ module Boom
       #{yellow "Go edit "} #{Boom.config.file +  yellow(" and make it all better") }
       ).gsub(/^ {8}/, '') # strip the first eight spaces of every line
     end
-
-
   end
 end

@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'boom'
-  s.version           = '0.2.3'
-  s.date              = '2011-09-06'
+  s.version           = '0.0.1'
+  s.date              = '2012-03-17'
   s.rubyforge_project = 'boom'
 
   ## Make sure your summary is short. The description may be as long
@@ -31,9 +31,9 @@ Gem::Specification.new do |s|
   ## List the primary authors. If there are a bunch of authors, it's probably
   ## better to set the email to an email list or something. If you don't have
   ## a custom homepage, consider using your GitHub URL or the like.
-  s.authors  = ["Zach Holman"]
-  s.email    = 'github.com@zachholman.com'
-  s.homepage = 'https://github.com/holman/boom'
+  s.authors  = ["Zach Holman", "Mark Burns"]
+  s.email    = 'markthedeveloper@gmail.com'
+  s.homepage = 'https://github.com/markburns/kaboom'
 
   ## This gets added to the $LOAD_PATH so that 'lib/NAME.rb' can be required as
   ## require 'NAME.rb' or'/lib/NAME/file.rb' can be as require 'NAME/file.rb'
@@ -44,7 +44,7 @@ Gem::Specification.new do |s|
   #s.extensions = %w[ext/extconf.rb]
 
   ## If your gem includes any executables, list them here.
-  s.executables = ["boom"]
+  s.executables = ["boom", "kaboom"]
   s.default_executable = 'boom'
 
   ## Specify any RDoc options here. You'll want to add your README and
@@ -74,6 +74,7 @@ Gem::Specification.new do |s|
     README.markdown
     Rakefile
     bin/boom
+    bin/kaboom
     boom.gemspec
     completion/README.md
     completion/boom.bash
@@ -85,7 +86,9 @@ Gem::Specification.new do |s|
     lib/boom/core_ext/symbol.rb
     lib/boom/item.rb
     lib/boom/list.rb
+    lib/boom/output.rb
     lib/boom/platform.rb
+    lib/boom/remote.rb
     lib/boom/storage.rb
     lib/boom/storage/base.rb
     lib/boom/storage/gist.rb
@@ -97,12 +100,14 @@ Gem::Specification.new do |s|
     test/examples/test_json.json
     test/examples/urls.json
     test/helper.rb
+    test/output_interceptor.rb
     test/test_color.rb
     test/test_command.rb
     test/test_config.rb
     test/test_item.rb
     test/test_list.rb
     test/test_platform.rb
+    test/test_remote.rb
   ]
   # = MANIFEST =
 

@@ -35,7 +35,7 @@ module Boom
       def open_command
         if darwin?
           'open'
-        elsif windows? 
+        elsif windows?
           'start'
         else
           'xdg-open'
@@ -69,7 +69,7 @@ module Boom
           'xclip -selection clipboard'
         end
       end
-      
+
       # Public: copies a given Item's value to the clipboard. This method is
       # designed to handle multiple platforms.
       #

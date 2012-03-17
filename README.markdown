@@ -1,8 +1,9 @@
-# B O O M
+# K A B O O M
 
 ## About
 
 boom manages your text snippets. On the command line. I just blew your mind.
+kaboom adds sharing snippets. On the command line.
 
 For more details about what boom is and how it works, check out
 [boom's website](http://holman.github.com/boom). For full usage details
@@ -11,7 +12,7 @@ For more details about what boom is and how it works, check out
 
 ## Install
 
-    gem install boom
+    gem install kaboom
 
 ## Quick and Dirty
 
@@ -43,7 +44,12 @@ each others command lines
     # you:
     $ kaboom config ackrc > ~/.ackrc
 
+## Distributed sharing of snippets with boom and kaboom
+    # me:
+    $ kaboom shared_links pivotal <  boom links pivotal
 
+    $ you:
+    $ kaboom shared_links pivotal >  boom links pivotal
 
 ## Contribute
 

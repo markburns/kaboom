@@ -6,7 +6,7 @@
 #
 module Boom
   module Storage
-    
+
     def self.backend=(backend)
       backend = backend.capitalize
       Boom::Storage.const_get(backend)

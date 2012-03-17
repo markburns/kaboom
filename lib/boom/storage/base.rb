@@ -78,8 +78,6 @@ module Boom
         { :lists => lists.collect(&:to_hash) }
       end
 
-
-
       def handle error, message
         case error
         when NoMethodError
@@ -88,8 +86,6 @@ module Boom
           output message
         end
       end
-
-
     end
   end
 end
