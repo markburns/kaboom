@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    boom (0.3.0)
+    boom (0.3.1)
       json_pure (~> 1.5.3)
       multi_json (~> 1.0.3)
 

@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   ## Leave these as is they will be modified for you by the rake gemspec task.
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
-  s.name              = 'boom'
+  s.name              = 'kaboom'
   s.version           = '0.3.1'
   s.date              = '2012-03-17'
   s.rubyforge_project = 'boom'
@@ -75,27 +75,27 @@ Gem::Specification.new do |s|
     Rakefile
     bin/boom
     bin/kaboom
-    boom.gemspec
     completion/README.md
     completion/boom.bash
     completion/boom.zsh
-    lib/boom.rb
-    lib/boom/color.rb
-    lib/boom/command.rb
-    lib/boom/config.rb
-    lib/boom/core_ext/symbol.rb
-    lib/boom/item.rb
-    lib/boom/list.rb
-    lib/boom/output.rb
-    lib/boom/platform.rb
-    lib/boom/remote.rb
-    lib/boom/storage.rb
-    lib/boom/storage/base.rb
-    lib/boom/storage/gist.rb
-    lib/boom/storage/json.rb
-    lib/boom/storage/keychain.rb
-    lib/boom/storage/mongodb.rb
-    lib/boom/storage/redis.rb
+    kaboom.gemspec
+    lib/kaboom.rb
+    lib/kaboom/color.rb
+    lib/kaboom/command.rb
+    lib/kaboom/config.rb
+    lib/kaboom/core_ext/symbol.rb
+    lib/kaboom/item.rb
+    lib/kaboom/list.rb
+    lib/kaboom/output.rb
+    lib/kaboom/platform.rb
+    lib/kaboom/remote.rb
+    lib/kaboom/storage.rb
+    lib/kaboom/storage/base.rb
+    lib/kaboom/storage/gist.rb
+    lib/kaboom/storage/json.rb
+    lib/kaboom/storage/keychain.rb
+    lib/kaboom/storage/mongodb.rb
+    lib/kaboom/storage/redis.rb
     test/examples/config_json.json
     test/examples/test_json.json
     test/examples/urls.json
