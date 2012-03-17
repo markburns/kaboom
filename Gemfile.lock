@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kaboom (0.3.1)
+    kaboom (0.3.2)
       json_pure (~> 1.5.3)
       multi_json (~> 1.0.3)
 

@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'kaboom'
-  s.version           = '0.3.1'
+  s.version           = '0.3.2'
   s.date              = '2012-03-17'
   s.rubyforge_project = 'boom'
 
@@ -117,6 +117,7 @@ Gem::Specification.new do |s|
     completion/boom.zsh
     kaboom.gemspec
     lib/kaboom.rb
+    lib/kaboom/.command.rb.swo
     lib/kaboom/color.rb
     lib/kaboom/command.rb
     lib/kaboom/config.rb
