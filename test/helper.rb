@@ -13,7 +13,7 @@ require 'mocha'
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require 'boom'
+require 'kaboom'
 
 def boom_json(name)
   root = File.expand_path(File.dirname(__FILE__))
