@@ -1,50 +1,50 @@
 require 'helper'
 
 class TestPlatform < Test::Unit::TestCase
-  def setup
+  before do
     [Boom::Platform::Darwin, Boom::Platform::Linux,
       Boom::Platform::Windows].each do |klass|
       klass.any_instance.stubs('system')
     end
   end
 
-  def test_darwin
+  it "darwin" do
     assert_equal Boom::Platform.platform.class,
       Boom::Platform::Darwin, RUBY_PLATFORM.include?('darwin')
   end
 
-  def test_windows
+  it "windows" do
     assert_equal Boom::Platform.platform.class,
       Boom::Platform::Windows if RUBY_PLATFORM =~ /mswin|mingw/
   end
 
-  def test_linux
+  it "linux" do
     assert_equal Boom::Platform.platform.class,
       Boom::Platform::Linux if RUBY_PLATFORM =~ /mswin|mingw/
   end
 
-  def test_open_command_darwin
-    assert_equal Boom::Platform::Darwin.new.open_command, 'open'
+  it "open command darwin" do
+    'open'.should == Boom::Platform::Darwin.new.open_command
   end
 
-  def test_open_command_windows
-    assert_equal Boom::Platform::Windows.new.open_command, 'start'
+  it "open command windows" do
+    'start'.should == Boom::Platform::Windows.new.open_command
   end
 
-  def test_open_command_linux
-    assert_equal Boom::Platform::Linux.new.open_command, 'xdg-open'
+  it "open command linux" do
+    'xdg-open'.should == Boom::Platform::Linux.new.open_command
   end
 
-  def test_copy_command_darwin
-    assert_equal Boom::Platform::Darwin.new.copy_command, 'pbcopy'
+  it "copy command darwin" do
+    'pbcopy'.should == Boom::Platform::Darwin.new.copy_command
   end
 
-  def test_copy_command_windows
-    assert_equal Boom::Platform::Windows.new.copy_command, 'clip'
+  it "copy command windows" do
+    'clip'.should == Boom::Platform::Windows.new.copy_command
   end
 
-  def test_copy_command_linux
-    assert_equal Boom::Platform::Linux.new.copy_command, 'xclip -selection clipboard'
+  it "copy command linux" do
+    'xclip -selection clipboard'.should == Boom::Platform::Linux.new.copy_command
   end
 
 end

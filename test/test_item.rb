@@ -4,51 +4,51 @@ require 'helper'
 
 class TestItem < Test::Unit::TestCase
 
-  def setup
+  before do
     @item = Boom::Item.new('github','https://github.com')
   end
 
-  def test_name
-    assert_equal 'github', @item.name
+  it "name" do
+    @item.name.should == 'github'
   end
 
-  def test_value
-    assert_equal 'https://github.com', @item.value
+  it "value" do
+    @item.value.should == 'https://github.com'
   end
 
-  def test_short_name
-    assert_equal 'github', @item.short_name
+  it "short name" do
+    @item.short_name.should == 'github'
   end
 
-  def test_short_name
+  it "short name" do
     @item.name = 'github github github lol lol lol'
-    assert_equal 'github github g…', @item.short_name
+    @item.short_name.should == 'github github g…'
   end
 
-  def test_spacer_none
+  it "spacer none" do
     @item.name = 'github github github lol lol lol'
-    assert_equal '', @item.spacer
+    @item.spacer.should == ''
   end
 
-  def test_spacer_tons
-    assert_equal '          ', @item.spacer
+  it "spacer tons" do
+    @item.spacer.should == '          '
   end
 
-  def test_to_hash
-    assert_equal 1, @item.to_hash.size
+  it "to hash" do
+    @item.to_hash.size.should == 1
   end
 
-  def test_url
-    assert_equal 'https://github.com', @item.url
+  it "url" do
+    @item.url.should == 'https://github.com'
   end
   
-  def test_url_with_additional_description
+  it "url with additional description" do
     @item = Boom::Item.new('github', 'social coding https://github.com')
-    assert_equal 'https://github.com', @item.url
+    @item.url.should == 'https://github.com'
   end
   
-  def test_url_without_url
+  it "url without url" do
     @item = Boom::Item.new('didum', 'dadam lol omg')
-    assert_equal 'dadam lol omg', @item.url
+    @item.url.should == 'dadam lol omg'
   end
 end

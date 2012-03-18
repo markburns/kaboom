@@ -4,67 +4,67 @@ require 'helper'
 
 class TestList < Test::Unit::TestCase
 
-  def setup
+  before do
     @list = Boom::List.new('urls')
     @item = Boom::Item.new('github','https://github.com')
     boom_json :urls
   end
 
-  def test_name
-    assert_equal 'urls', @list.name
+  it "name" do
+    @list.name.should == 'urls'
   end
 
-  def test_add_items
-    assert_equal 0, @list.items.size
+  it "add items" do
+    @list.items.size.should == 0
     @list.add_item(@item)
-    assert_equal 1, @list.items.size
+    @list.items.size.should == 1
   end
 
-  def test_add_item_with_duplicate_name
+  it "add item with duplicate name" do
     @list.add_item(@item)
-    assert_equal 1, @list.items.size
-    assert_equal 'https://github.com', @list.find_item('github').value
+    @list.items.size.should == 1
+    @list.find_item('github').value.should == 'https://github.com'
     @diff_item = Boom::Item.new('github', 'https://github.com/home')
     @list.add_item(@diff_item)
-    assert_equal 1, @list.items.size
-    assert_equal 'https://github.com/home', @list.find_item('github').value
+    @list.items.size.should == 1
+    @list.find_item('github').value.should == 'https://github.com/home'
   end
 
-  def test_to_hash
-    assert_equal 0, @list.to_hash[@list.name].size
+  it "to hash" do
+    @list.to_hash[@list.name].size.should == 0
     @list.add_item(@item)
-    assert_equal 1, @list.to_hash[@list.name].size
+    @list.to_hash[@list.name].size.should == 1
   end
 
-  def test_find
-    assert_equal 'urls', Boom::List.find('urls').name
+  it "find" do
+    Boom::List.find('urls').name.should == 'urls'
   end
 
-  def test_find_item
+  it "find item" do
     @list.add_item(@item)
-    assert_equal 'https://github.com', @list.find_item('github').value
+    @list.find_item('github').value.should == 'https://github.com'
   end
 
-  def test_find_item_long_name
+  it "find item long name" do
     @item = Boom::Item.new('long-long-long-name','longname')
     @list.add_item(@item)
-    assert_equal 'longname', @list.find_item('long-long-long-').value
-    assert_equal 'longname', @list.find_item('long-long-long-…').value
+    @list.find_item('long-long-long-').value.should == 'longname'
+    @list.find_item('long-long-long-…').value.should == 'longname'
   end
 
-  def test_delete_success
-    assert_equal 1, Boom.storage.lists.size
-    assert Boom::List.delete('urls')
-    assert_equal 0, Boom.storage.lists.size
+  it "delete success" do
+    Boom.storage.lists.size.should == 1
+    Boom::List.delete('urls').should.not == nil
+    Boom.storage.lists.size.should == 0
   end
 
-  def test_delete_fail
-    assert_equal 1, Boom.storage.lists.size
-    assert !Boom::List.delete('robocop')
-    assert_equal 1, Boom.storage.lists.size
+  it "delete fail" do
+    Boom.storage.lists.size.should == 1
+    Boom::List.delete('robocop').should.not == true
+    Boom.storage.lists.size.should == 1
   end
 
-  def test_deletes_scoped_to_list
+  it "deletes scoped to list" do
     @list.add_item(@item)
 
     @list_2 = Boom::List.new('sexy-companies')
@@ -72,8 +72,8 @@ class TestList < Test::Unit::TestCase
     @list_2.add_item(@item_2)
 
     @list.delete_item(@item.name)
-    assert_equal 0, @list.items.size
-    assert_equal 1, @list_2.items.size
+    @list.items.size.should == 0
+    @list_2.items.size.should == 1
   end
 
 end

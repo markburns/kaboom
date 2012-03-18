@@ -2,27 +2,27 @@ require 'helper'
 
 class TestColor < Test::Unit::TestCase
 
-  def test_colorize
+  it "colorize" do
     assert_equal "\e[35mBoom!\e[0m",
       Boom::Color.colorize("Boom!", :magenta)
   end
 
-  def test_magenta
+  it "magenta" do
     assert_equal "\e[35mMagenta!\e[0m",
       Boom::Color.magenta("Magenta!")
   end
 
-  def test_red
+  it "red" do
     assert_equal "\e[31mRed!\e[0m",
       Boom::Color.red("Red!")
   end
 
-  def test_yellow
+  it "yellow" do
     assert_equal "\e[33mYellow!\e[0m",
       Boom::Color.yellow("Yellow!")
   end
 
-  def test_cyan
+  it "cyan" do
     assert_equal "\e[36mCyan!\e[0m",
       Boom::Color.cyan("Cyan!")
   end

@@ -8,7 +8,7 @@ class TestRemote < Test::Unit::TestCase
     m = stub 'storage_type', :class => type
   end
 
-  def test_remote
+  it "remote" do
     Boom.use_remote false
     Boom::Output.capture_output
 
@@ -18,7 +18,7 @@ class TestRemote < Test::Unit::TestCase
     remote = [Boom::Storage::Gist, Boom::Storage::Mongodb, Boom::Storage::Redis]
 
     (local + remote).all? do |type|
-      assert Boom::Remote.allowed? dummy(type)
+      Boom::Remote.allowed? dummy(type).should.not == nil
     end
 
     Boom.use_remote true

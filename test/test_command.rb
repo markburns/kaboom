@@ -5,7 +5,7 @@ require 'output_interceptor'
 
 class TestCommand < Test::Unit::TestCase
 
-  def setup
+  before do
         [Boom::Platform::Darwin, Boom::Platform::Linux,
       Boom::Platform::Windows].each do |klass|
       klass.any_instance.stubs('system')
@@ -22,50 +22,50 @@ class TestCommand < Test::Unit::TestCase
     output.gsub(/\e\[\d\d?m/, '')
   end
 
-  def test_use_remote
+  it "use remote" do
     response = command('remote the_office fun awesome')
 
     assert_match /a new list called the_office/, response
     assert_match /fun in the_office is awesome/, response
   end
 
-  def test_remote_checks_for_acceptable_config
+  it "remote checks for acceptable config" do
     response = command('remote the_office fun awesome')
 
     assert_match /a new list called the_office/, response
     assert_match /fun in the_office is awesome/, response
   end
 
-  def test_overview_for_empty
+  it "overview for empty" do
     storage = Boom::Storage
     storage.stubs(:lists).returns([])
     Boom::Command.stubs(:storage).returns(storage)
     assert_match /have anything yet!/, command(nil)
   end
 
-  def test_overview
-    assert_equal '  urls (2)', command(nil)
+  it "overview" do
+    command(nil).should == '  urls (2)'
   end
 
-  def test_list_detail
+  it "list detail" do
     assert_match /github/, command('urls')
   end
 
-  def test_list_all
+  it "list all" do
     cmd = command('all')
     assert_match /urls/,    cmd
     assert_match /github/,  cmd
   end
 
-  def test_list_creation
+  it "list creation" do
     assert_match /a new list called newlist/, command('newlist')
   end
 
-  def test_list_creation_with_item
+  it "list creation with item" do
     assert_match /a new list called newlist.* item in newlist/, command('newlist item blah')
   end
 
-  def test_list_creation_with_item_stdin
+  it "list creation with item stdin" do
     STDIN.stubs(:read).returns('blah')
     STDIN.stubs(:stat)
     STDIN.stat.stubs(:size).returns(4)
@@ -73,113 +73,113 @@ class TestCommand < Test::Unit::TestCase
     assert_match /a new list called newlist.* item in newlist is blah/, command('newlist item')
   end
 
-  def test_item_access
+  it "item access" do
     IO.stubs(:popen)
     assert_match /copied https:\/\/github\.com to your clipboard/,
       command('github')
   end
 
-  def test_item_access_scoped_by_list
+  it "item access scoped by list" do
     IO.stubs(:popen)
     assert_match /copied https:\/\/github\.com to your clipboard/,
       command('urls github')
   end
 
-  def test_item_open_item
+  it "item open item" do
     assert_match /opened https:\/\/github\.com for you/, command('open github')
   end
 
-  def test_item_open_specific_item
+  it "item open specific item" do
     assert_match /opened https:\/\/github\.com for you/, command('open urls github')
   end
 
-  def test_item_open_lists
+  it "item open lists" do
     assert_match /opened all of urls for you/, command('open urls')
   end
 
-  def test_item_creation
+  it "item creation" do
     assert_match /twitter in urls/,
       command('urls twitter http://twitter.com/holman')
   end
 
-  def test_item_creation_long_value
+  it "item creation long value" do
     assert_match /is tanqueray hendricks bombay/,
       command('urls gins tanqueray hendricks bombay')
   end
 
-  def test_list_deletion_no
+  it "list deletion no" do
     STDIN.stubs(:gets).returns('n')
     assert_match /Just kidding then/, command('urls delete')
   end
 
-  def test_list_deletion_yes
+  it "list deletion yes" do
     STDIN.stubs(:gets).returns('y')
     assert_match /Deleted all your urls/, command('urls delete')
   end
 
-  def test_item_deletion
+  it "item deletion" do
     assert_match /github is gone forever/, command('urls github delete')
   end
 
-  def test_help
+  it "help" do
     assert_match 'boom help', command('help')
     assert_match 'boom help', command('-h')
     assert_match 'boom help', command('--help')
   end
 
-  def test_noop_options
+  it "noop options" do
     assert_match 'boom help', command('--anything')
     assert_match 'boom help', command('-d')
   end
 
-  def test_nonexistent_item_access_scoped_by_list
+  it "nonexistent item access scoped by list" do
     assert_match /twitter not found in urls/, command('urls twitter')
   end
 
-  def test_echo_item
+  it "echo item" do
     assert_match %r{https://github\.com}, command('echo github')
   end
 
-  def test_echo_item_shorthand
+  it "echo item shorthand" do
     assert_match %r{https://github\.com}, command('e github')
   end
 
-  def test_echo_item_does_not_exist
+  it "echo item does not exist" do
     assert_match /wrong.*not found/, command('echo wrong')
   end
 
-  def test_echo_list_item
+  it "echo list item" do
     assert_match %r{https://github\.com}, command('echo urls github')
   end
 
-  def test_echo_list_item_does_not_exist
+  it "echo list item does not exist" do
     assert_match /wrong not found in urls/, command('echo urls wrong')
   end
 
-  def test_show_storage
+  it "show storage" do
     Boom::Config.any_instance.stubs(:attributes).returns('backend' => 'json')
     assert_match /You're currently using json/, command('storage')
   end
 
-  def test_nonexistant_storage_switch
+  it "nonexistant storage switch" do
     Boom::Config.any_instance.stubs(:save).returns(true)
     assert_match /couldn't find that storage engine/, command('switch dkdkdk')
   end
 
-  def test_storage_switch
+  it "storage switch" do
     Boom::Config.any_instance.stubs(:save).returns(true)
     assert_match /We've switched you over to redis/, command('switch redis')
   end
 
-  def test_version_switch
+  it "version switch" do
     assert_match /#{Boom::VERSION}/, command('-v')
   end
 
-  def test_version_long
+  it "version long" do
     assert_match /#{Boom::VERSION}/, command('--version')
   end
 
-  def test_stdin_pipes
+  it "stdin pipes" do
     stub = Object.new
     stub.stubs(:stat).returns([1,2])
     stub.stubs(:read).returns("http://twitter.com")
@@ -187,36 +187,36 @@ class TestCommand < Test::Unit::TestCase
     assert_match /twitter in urls/, command('urls twitter')
   end
 
-  def test_random
+  it "random" do
     Boom::Config.any_instance.stubs(:save).returns(true)
     assert_match /opened .+ for you/, command('random')
   end
 
-  def test_random_from_list
+  it "random from list" do
     Boom::Config.any_instance.stubs(:save).returns(true)
     assert_match /(github|zachholman)/, command('random urls')
   end
 
-  def test_random_list_not_exist
+  it "random list not exist" do
     Boom::Config.any_instance.stubs(:save).returns(true)
     assert_match /couldn't find that list\./, command('random 39jc02jlskjbbac9')
   end
 
-  def test_delete_item_list_not_exist
+  it "delete item list not exist" do
     assert_match /couldn't find that list\./, command('urlz github delete')
   end
 
-  def test_delete_item_wrong_list
+  it "delete item wrong list" do
     command('urlz twitter https://twitter.com/')
     assert_match /github not found in urlz/, command('urlz github delete')
   end
 
-  def test_delete_item_different_name
+  it "delete item different name" do
     command('foo bar baz')
     assert_match /bar is gone forever/, command('foo bar delete')
   end
 
-  def test_delete_item_same_name
+  it "delete item same name" do
     command('duck duck goose')
     assert_match /duck is gone forever/, command('duck duck delete')
   end

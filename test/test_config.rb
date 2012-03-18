@@ -5,7 +5,7 @@ require 'output_interceptor'
 
 class TestConfig < Test::Unit::TestCase
 
-  def setup
+  before do
     Boom::Config.any_instance.stubs(:file).
       returns("test/examples/test_json.json")
 
@@ -13,14 +13,14 @@ class TestConfig < Test::Unit::TestCase
     @config.stubs(:save).returns(true)
   end
 
-  def test_bootstraps_config
+  it "bootstraps config" do
     @config.bootstrap
-    assert_equal ({:backend => 'json'}), @config.attributes
+    @config.attributes.should == ({:backend => 'json'})
   end
 
-  def test_attributes
+  it "attributes" do
     @config.attributes[:wu_tang] = 'clan'
-    assert_equal 'clan', @config.attributes[:wu_tang]
+    @config.attributes[:wu_tang].should == 'clan'
   end
 
 
