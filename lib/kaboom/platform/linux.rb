@@ -11,5 +11,5 @@ class Boom::Platform
     def open_command
       "xdg-open"
     end
- end
+  end
 end

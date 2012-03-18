@@ -10,17 +10,7 @@ module Boom
         @platform ||= detect_platform.new
       end
 
-      delegate :open, :copy, :to => :platform
-
-      def edit json_file
-        if $EDITOR
-          platform.edit json_file
-        else
-          system("#{platform.open_command} #{json_file}")
-        end
-
-        "Make your edits, and do be sure to save."
-      end
+      delegate :edit, :open, :copy, :to => :platform
 
       private
       def detect_platform

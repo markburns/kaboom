@@ -1,7 +1,7 @@
 class Boom::Platform
   class Windows
     def edit json_file
-      system "start %EDITOR$ #{json_file}"
+      super { system "start %EDITOR$ #{json_file}" }
     end
 
     def copy_command
