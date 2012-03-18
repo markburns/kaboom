@@ -1,6 +1,6 @@
-require 'helper'
+require File.expand_path('spec/spec_helper')
 
-class TestPlatform < Test::Unit::TestCase
+describe Boom::Platform do
   before do
     [Boom::Platform::Darwin, Boom::Platform::Linux,
       Boom::Platform::Windows].each do |klass|

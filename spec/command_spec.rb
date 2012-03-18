@@ -1,10 +1,7 @@
-# coding: utf-8
-
-require 'helper'
+require File.expand_path('spec/spec_helper')
 require 'output_interceptor'
 
-class TestCommand < Test::Unit::TestCase
-
+describe Boom::Command do
   before do
         [Boom::Platform::Darwin, Boom::Platform::Linux,
       Boom::Platform::Windows].each do |klass|

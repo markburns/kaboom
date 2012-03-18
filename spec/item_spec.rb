@@ -1,9 +1,7 @@
-# coding: utf-8
+#coding: utf-8
+require File.expand_path('spec/spec_helper')
 
-require 'helper'
-
-class TestItem < Test::Unit::TestCase
-
+describe Boom::Item do
   before do
     @item = Boom::Item.new('github','https://github.com')
   end
@@ -41,12 +39,12 @@ class TestItem < Test::Unit::TestCase
   it "url" do
     @item.url.should == 'https://github.com'
   end
-  
+
   it "url with additional description" do
     @item = Boom::Item.new('github', 'social coding https://github.com')
     @item.url.should == 'https://github.com'
   end
-  
+
   it "url without url" do
     @item = Boom::Item.new('didum', 'dadam lol omg')
     @item.url.should == 'dadam lol omg'

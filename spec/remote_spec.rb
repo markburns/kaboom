@@ -1,9 +1,7 @@
-# coding: utf-8
-
-require 'helper'
+require File.expand_path('spec/spec_helper')
 require 'output_interceptor'
 
-class TestRemote < Test::Unit::TestCase
+describe Remote do
   def dummy type
     m = stub 'storage_type', :class => type
   end

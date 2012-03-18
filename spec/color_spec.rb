@@ -1,7 +1,6 @@
-require 'helper'
+require File.expand_path('spec/spec_helper')
 
-class TestColor < Test::Unit::TestCase
-
+describe Boom::Color do
   it "colorize" do
     assert_equal "\e[35mBoom!\e[0m",
       Boom::Color.colorize("Boom!", :magenta)
