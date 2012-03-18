@@ -6,16 +6,12 @@ class Boom::Platform
 
     def edit json_file
       if $EDITOR
-        if block_given?
-          yield
-        else
-          system "`echo $EDITOR` #{json_file} &"
-        end
+        return yield if block_given?
+
+        system "`echo $EDITOR` #{json_file} &"
       else
         open_file json_file
       end
-
-      "Make your edits, and do be sure to save."
     end
 
     def copy item

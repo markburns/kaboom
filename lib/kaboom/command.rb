@@ -103,13 +103,14 @@ module Boom
         return random(major)     if command == 'random' || command == 'rand' || command == 'r'
 
         # if we're operating on a List
-        if storage.list_exists?(command)
-          return delete_list(command) if major == 'delete'
-          return detail_list(command) unless major
+        list = command
+        if storage.list_exists?(list)
+          return delete_list(list) if major == 'delete'
+          return detail_list(list) unless major
           unless minor == 'delete'
-            return add_item(command,major,minor) if minor
-            return add_item(command,major,stdin.read) if stdin.stat.size > 0
-            return search_list_for_item(command, major)
+            return add_item(list,major,minor) if minor
+            return add_item(list,major,stdin.read) if stdin.stat.size > 0
+            return search_list_for_item(list, major)
           end
         end
 
@@ -157,18 +158,18 @@ module Boom
       # Public: opens the Item.
       #
       # Returns nothing.
-      def open(major, minor)
-        if storage.list_exists?(major)
-          list = List.find(major)
-          if minor
-            item = storage.items.detect { |item| item.name == minor }
+      def open(key, value)
+        if storage.list_exists?(key)
+          list = List.find(key)
+          if value
+            item = storage.items.detect { |item| item.name == value }
             output "#{cyan("Boom!")} We just opened #{yellow(Platform.open(item))} for you."
           else
             list.items.each { |item| Platform.open(item) }
-            output "#{cyan("Boom!")} We just opened all of #{yellow(major)} for you."
+            output "#{cyan("Boom!")} We just opened all of #{yellow(key)} for you."
           end
         else
-          item = storage.items.detect { |item| item.name == major }
+          item = storage.items.detect { |item| item.name == key }
           output "#{cyan("Boom!")} We just opened #{yellow(Platform.open(item))} for you."
         end
       end
