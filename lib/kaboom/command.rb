@@ -349,37 +349,62 @@ module Boom
         end
       end
 
+      def y t
+        yellow t
+      end
+
+      def c t
+        cyan t
+      end
+
+      def r t
+        red t
+      end
+
       # Public: prints all the commands of boom.
       #
       # Returns nothing.
       def help
         text = %{
-          - boom: help ---------------------------------------------------
+          #{r "BOOM snippets"} ___________________________________________________
 
-          boom                          display high-level overview
-          boom all                      show all items in all lists
-          boom edit                     edit the boom JSON file in $EDITOR
-          boom help                     this help text
-          boom storage                  shows which storage backend you're using
-          boom switch <storage>         switches to a different storage backend
+          boom                                 display high-level overview
+          boom #{y "all"}                             show all items in all lists
+          boom #{y "edit"}                            edit the boom JSON file in $EDITOR
+          boom #{y "help"}                            this help text
+          boom #{y "storage"}                         shows which storage backend you're using
+          boom #{y "switch"} #{c "<storage>"}                switches to a different storage backend
 
-          boom <list>                   create a new list
-          boom <list>                   show items for a list
-          boom <list> delete            deletes a list
+          boom #{c "<list>"}                          create a new list
+          boom #{c "<list>"}                          show items for a list
+          boom #{c "<list>"} #{y "delete"}                   deletes a list
 
-          boom <list> <name> <value>    create a new list item
-          boom <name>                   copy item's value to clipboard
-          boom <list> <name>            copy item's value to clipboard
-          boom open <name>              open item's url in browser
-          boom open <list> <name>       open all item's url in browser for a list
-          boom random                   open a random item's url in browser
-          boom random <list>            open a random item's url for a list in browser
-          boom echo <name>              echo the item's value without copying
-          boom echo <list> <name>       echo the item's value without copying
-          boom <list> <name> delete     deletes an item
+          boom #{c "<list> <name> <value>"}           create a new list item
+          boom #{c "<name>"}                          copy item's value to clipboard
+          boom #{c "<list> <name>"}                   copy item's value to clipboard
+          boom #{y "open"} #{c "<name>"}                     open item's url in browser
+          boom #{y "open"} #{c "<list> <name>"}              open all item's url in browser for a list
+          boom #{y "random"}                          open a random item's url in browser
+          boom #{y "random"} #{c "<list>"}                   open a random item's url for a list in browser
+          boom #{y "echo"} #{c "<name>"}                     echo the item's value without copying
+          boom #{y "echo"} #{c "<list> <name>"}              echo the item's value without copying
+          boom #{c "<list> <name>"} #{y "delete"}            deletes an item
 
+          ___________________________________________________________________
+          #{red "KABOOM sharing"}
+
+          boom remote <any> <command> <above>  using the ~/.boom.remote.conf it
+          kaboom      <any> <command> <above>  connects to an alternative backend
+                                               meaning you can pipe to a remote
+                                               backend storage
+
+          e.g. to pipe config from a local boom to a remote boom do:
+
+          kaboom #{c("config ackrc")} < boom #{c "config ackrc"}
+
+          ___________________________________________________________________
           all other documentation is located at:
-            https://github.com/holman/boom
+            https://github.com/markburns/boom
         }.gsub(/^ {8}/, '') # strip the first eight spaces of every line
 
         output text
