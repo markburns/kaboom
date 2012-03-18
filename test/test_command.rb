@@ -137,19 +137,19 @@ class TestCommand < Test::Unit::TestCase
   end
 
   def test_echo_item
-    assert_match /https:\/\/github\.com/, command('echo github')
+    assert_match %r{https://github\.com}, command('echo github')
   end
 
   def test_echo_item_shorthand
-    assert_match /https:\/\/github\.com/, command('e github')
+    assert_match %r{https://github\.com}, command('e github')
   end
 
   def test_echo_item_does_not_exist
-    assert_match /wrong not found/, command('echo wrong')
+    assert_match /wrong.*not found/, command('echo wrong')
   end
 
   def test_echo_list_item
-    assert_match /https:\/\/github\.com/, command('echo urls github')
+    assert_match %r{https://github\.com}, command('echo urls github')
   end
 
   def test_echo_list_item_does_not_exist
@@ -178,6 +178,7 @@ class TestCommand < Test::Unit::TestCase
   def test_version_long
     assert_match /#{Boom::VERSION}/, command('--version')
   end
+
   def test_stdin_pipes
     stub = Object.new
     stub.stubs(:stat).returns([1,2])

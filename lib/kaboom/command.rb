@@ -64,13 +64,15 @@ module Boom
         storage.lists.each do |list|
           output "  #{list.name} (#{list.items.size})"
         end
-        s =  "You don't have anything yet! To start out, create a new list:"
-        s << "\n  $ boom <list-name>"
-        s << "\nAnd then add something to your list!"
-        s << "\n  $ boom <list-name> <item-name> <item-value>"
-        s << "\nYou can then grab your new item:"
-        s << "\n  $ boom <item-name>"
-        output s if storage.lists.size == 0
+        s = <<-eof
+          You don't have anything yet! To start out, create a new list:"
+          $ boom <list-name>"
+          And then add something to your list!"
+          $ boom <list-name> <item-name> <item-value>"
+          You can then grab your new item:"
+          $ boom <item-name>"
+        eof
+        output s.gsub(/ {10}/,"") if storage.lists.size == 0
       end
 
       # Public: prints the detailed view of all your Lists and all their
@@ -155,24 +157,28 @@ module Boom
         end
       end
 
-      # Public: opens the Item.
-      #
-      # Returns nothing.
       def open(key, value)
         if storage.list_exists?(key)
           list = List.find(key)
           if value
             item = storage.items.detect { |item| item.name == value }
-            output "#{cyan("Boom!")} We just opened #{yellow(Platform.open(item))} for you."
           else
             list.items.each { |item| Platform.open(item) }
-            output "#{cyan("Boom!")} We just opened all of #{yellow(key)} for you."
+            return output "#{cyan("Boom!")} We just opened all of #{yellow(key)} for you."
           end
         else
           item = storage.items.detect { |item| item.name == key }
-          output "#{cyan("Boom!")} We just opened #{yellow(Platform.open(item))} for you."
         end
+
+        return not_found key, value unless item
+        output "#{cyan("Boom!")} We just opened #{y(Platform.open(item))} for you."
       end
+
+      def not_found major, minor=nil
+        return output "#{yellow(major)} #{red("not found")}" if minor.nil?
+        return output "#{yellow(minor)} #{red("not found in")} #{yellow(major)}"
+      end
+
 
       # Public: Opens a random item
       #
@@ -197,16 +203,13 @@ module Boom
       #
       # Returns nothing
       def echo(major, minor)
-        unless minor
-          item = storage.items.detect do |item|
-            item.name == major
-          end
-          return output "#{yellow(major)} #{red("not found")}" unless item
-        else
+        if minor
           list = List.find(major)
           item = list.find_item(minor)
-          return output "#{yellow(minor)} #{red("not found in")} #{yellow(major)}" unless item
+        else
+          item = storage.items.detect { |i| i.name == major }
         end
+        return not_found major, minor unless item
         output item.value
       end
 
@@ -365,6 +368,9 @@ module Boom
       #
       # Returns nothing.
       def help
+        #this currently looks horrible in code, but nice in output.
+        #would be good to make it both
+
         text = %{
           #{r "BOOM snippets"} ___________________________________________________
 
@@ -406,7 +412,7 @@ module Boom
             https://github.com/markburns/kaboom
         }.gsub(/^ {8}/, '') # strip the first eight spaces of every line
 
-        output text
+          output text
       end
 
     end
