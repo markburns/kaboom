@@ -1,7 +1,5 @@
 # K A B O O M
 
-## About
-
 boom manages your text snippets. On the command line. I just blew your mind.
 
 kaboom allows sharing snippets across command lines.
