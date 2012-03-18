@@ -1,7 +1,7 @@
 require File.expand_path('spec/spec_helper')
 require 'output_interceptor'
 
-describe Remote do
+describe Boom::Remote do
   def dummy type
     m = stub 'storage_type', :class => type
   end

@@ -1,5 +1,5 @@
 # coding: utf-8
-
+require './lib/kaboom'
 require 'test/unit'
 
 begin

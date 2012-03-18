@@ -4,7 +4,7 @@ begin
   require 'rubygems'
 rescue LoadError
 end
-
+require 'ruby-debug'
 require 'fileutils'
 require 'multi_json'
 
