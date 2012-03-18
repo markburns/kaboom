@@ -93,6 +93,7 @@ each others command lines
   so that we can all easily back stuff up
 
   E.g.
+
   * clone the whole shared repo
   * backup your local repo to the central one underneath a namespace
 
