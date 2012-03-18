@@ -51,6 +51,7 @@ each others command lines
     $ kaboom config ackrc > ~/.ackrc
 
 ## Distributed sharing of snippets with boom and kaboom
+
     # me:
     $ kaboom shared_links pivotal <  boom links pivotal
 
@@ -82,18 +83,18 @@ each others command lines
   It's basically something like distributed key-value stores. I imagine some of
   the things that might be worth thinking about, based on DVC are:
 
-  Imports/Exports of lists/keys/values between repos.
-  Merge conflict resolution
-  Users/Permissions/Teams/Roles etc
-  Enterprisey XML backend
-  I'm kidding
+  * Imports/Exports of lists/keys/values between repos.
+  * Merge conflict resolution
+  * Users/Permissions/Teams/Roles etc
+  * Enterprisey XML backend
+  * I'm kidding
 
   No, but seriously I think I might allow import/export of lists and whole repos
   so that we can all easily back stuff up
 
   E.g.
-  clone the whole shared repo
-  backup your local repo to the central one underneath a namespace
+  * clone the whole shared repo
+  * backup your local repo to the central one underneath a namespace
 
 
 ## Contribute
