@@ -9,15 +9,18 @@ class TestPlatform < Test::Unit::TestCase
   end
 
   def test_darwin
-    assert_equal Boom::Platform.platform.class, Boom::Platform::Darwin, RUBY_PLATFORM.include?('darwin')
+    assert_equal Boom::Platform.platform.class,
+      Boom::Platform::Darwin, RUBY_PLATFORM.include?('darwin')
   end
 
   def test_windows
-    assert_equal Boom::Platform.platform.class, Boom::Platform::Windows if RUBY_PLATFORM =~ /mswin|mingw/
+    assert_equal Boom::Platform.platform.class,
+      Boom::Platform::Windows if RUBY_PLATFORM =~ /mswin|mingw/
   end
 
   def test_linux
-    assert_equal Boom::Platform.platform.class, Boom::Platform::Linux if RUBY_PLATFORM =~ /mswin|mingw/
+    assert_equal Boom::Platform.platform.class,
+      Boom::Platform::Linux if RUBY_PLATFORM =~ /mswin|mingw/
   end
 
   def test_open_command_darwin

@@ -6,6 +6,11 @@ require 'output_interceptor'
 class TestCommand < Test::Unit::TestCase
 
   def setup
+        [Boom::Platform::Darwin, Boom::Platform::Linux,
+      Boom::Platform::Windows].each do |klass|
+      klass.any_instance.stubs('system')
+    end
+        IO.stubs(:popen)
     boom_json :urls
   end
 
@@ -47,9 +52,9 @@ class TestCommand < Test::Unit::TestCase
   end
 
   def test_list_all
-    #cmd = command('all')
-    #assert_match /urls/,    cmd
-    #assert_match /github/,  cmd
+    cmd = command('all')
+    assert_match /urls/,    cmd
+    assert_match /github/,  cmd
   end
 
   def test_list_creation
@@ -81,17 +86,14 @@ class TestCommand < Test::Unit::TestCase
   end
 
   def test_item_open_item
-    Boom::Platform::Darwin.any_instance.stubs(:system).returns('')
     assert_match /opened https:\/\/github\.com for you/, command('open github')
   end
 
   def test_item_open_specific_item
-    Boom::Platform::Darwin.any_instance.stubs(:system).returns('')
     assert_match /opened https:\/\/github\.com for you/, command('open urls github')
   end
 
   def test_item_open_lists
-    Boom::Platform::Darwin.any_instance.stubs(:system).returns('')
     assert_match /opened all of urls for you/, command('open urls')
   end
 
@@ -120,7 +122,7 @@ class TestCommand < Test::Unit::TestCase
   end
 
   def test_edit
-    Boom::Platform::Darwin.any_instance.stubs(:system).returns('')
+    Boom::Platform.stubs(:system).returns('')
     assert_match 'Make your edits', command('edit')
   end
 
@@ -181,7 +183,6 @@ class TestCommand < Test::Unit::TestCase
   def test_version_long
     assert_match /#{Boom::VERSION}/, command('--version')
   end
-
   def test_stdin_pipes
     stub = Object.new
     stub.stubs(:stat).returns([1,2])
