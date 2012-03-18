@@ -390,11 +390,10 @@ module Boom
           boom #{y "echo"} #{c "<list> <name>"}              echo the item's value without copying
           boom #{c "<list> <name>"} #{y "delete"}            deletes an item
 
-          ___________________________________________________________________
-          #{red "KABOOM sharing"}
+          #{red "KABOOM sharing"} ___________________________________________________
 
-          boom remote <any> <command> <above>  using the ~/.boom.remote.conf it
-          kaboom      <any> <command> <above>  connects to an alternative backend
+          boom remote #{y "<any command above>"}      using the #{y "~/.boom.remote.conf"} it
+          kaboom      #{y "<any command above>"}      connects to an alternative backend
                                                meaning you can pipe to a remote
                                                backend storage
 
@@ -404,7 +403,7 @@ module Boom
 
           ___________________________________________________________________
           all other documentation is located at:
-            https://github.com/markburns/boom
+            https://github.com/markburns/kaboom
         }.gsub(/^ {8}/, '') # strip the first eight spaces of every line
 
         output text
