@@ -47,10 +47,10 @@ module Boom
       #
       # Returns a String of the Item value.
       def open(item)
-        unless windows?
-          system("#{open_command} '#{item.url.gsub("\'","'\\\\''")}'")
-        else
+        if windows?
           system("#{open_command} #{item.url.gsub("\'","'\\\\''")}")
+        else
+          system("#{open_command} '#{item.url.gsub("\'","'\\\\''")}'")
         end
 
         item.value
