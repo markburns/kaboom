@@ -4,17 +4,13 @@
 
 boom manages your text snippets. On the command line. I just blew your mind.
 
-kaboom adds sharing snippets. On the command line.
+kaboom allows sharing snippets across command lines.
 
 
 This is a fork of Zach Holman's amazing boom. Explanation for the fork follows
 a little later
 
 
-For more details about what boom is and how it works, check out
-[boom's website](http://holman.github.com/boom). For full usage details
-(including a complete list of commands), check out
-[boom's wiki](https://github.com/holman/boom/wiki).
 
 ## Install
 
@@ -35,7 +31,12 @@ And that's just a taste! I know, you're salivating, I can hear you from here.
 (Why your saliva is noisy is beyond me.) Check out the [full list of
 commands](https://github.com/holman/boom/wiki/Commands).
 
-## boom remote (or kaboom)
+For more details about what boom is and how it works, check out
+[boom's website](http://holman.github.com/boom). For full usage details
+(including a complete list of commands), check out
+[boom's wiki](https://github.com/holman/boom/wiki).
+
+# KABOOM
 You can even have a remote boom using config in ~/.boom.remote.conf
 
     $ boom remote "a sandwich" cheese "mighty fine"
