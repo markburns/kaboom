@@ -1,16 +1,16 @@
 class Boom::Platform
   class Darwin < Base
-    def edit json_file
-      system "`echo $EDITOR` #{json_file} &"
-    end
-
-    def copy item
-      super {'pbcopy'}
+    def copy_command
+      'pbcopy'
     end
 
     def open item
-      system("open '#{url_from(item).gsub("\'","'\\\\''")}'")
+      system("#{open_command} '#{item.url.gsub("\'","'\\\\''")}'")
       item.value
+    end
+
+    def open_command
+      "open"
     end
   end
 end

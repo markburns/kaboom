@@ -1,16 +1,20 @@
 class Boom::Platform
   class Windows
     def edit json_file
-      super{"start %EDITOR$ "}
+      system "start %EDITOR$ #{json_file}"
     end
 
-    def copy item
-      super {'clip'}
+    def copy_command
+      'clip'
     end
 
     def open item
-      system("start #{url_from(item).gsub("\'","'\\\\''")}")
-      item.respond_to?(:value) ? item.value : item
+      system("#{open_command} #{item.url.gsub("\'","'\\\\''")}")
+      item.value
+    end
+
+    def open_command
+      "start"
     end
   end
 end

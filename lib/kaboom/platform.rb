@@ -1,22 +1,13 @@
 require 'kaboom/platform/base'
 require 'kaboom/platform/darwin'
 require 'kaboom/platform/windows'
-require 'kaboom/platform/other'
+require 'kaboom/platform/linux'
 
 module Boom
   class Platform
     class << self
       def platform
-        @platform ||=
-          begin
-            if !!(RUBY_PLATFORM =~ /darwin/)
-              Darwin.new
-            elsif !!(RUBY_PLATFORM =~ /mswin|mingw/)
-              Windows.new
-            else
-              Other.new
-            end
-          end
+        @platform ||= detect_platform.new
       end
 
       delegate :open, :copy, :to => :platform
@@ -25,10 +16,21 @@ module Boom
         if $EDITOR
           platform.edit json_file
         else
-          platform.open json_file
+          system("#{platform.open_command} #{json_file}")
         end
 
         "Make your edits, and do be sure to save."
+      end
+
+      private
+      def detect_platform
+        if !!(RUBY_PLATFORM =~ /darwin/)
+          Darwin
+        elsif !!(RUBY_PLATFORM =~ /mswin|mingw/)
+          Windows
+        else
+          Other
+        end
       end
     end
   end

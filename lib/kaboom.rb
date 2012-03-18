@@ -10,6 +10,7 @@ require 'multi_json'
 
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
+require 'active_support/core_ext/module/delegation'
 require 'kaboom/output'
 require 'kaboom/color'
 require 'kaboom/platform'

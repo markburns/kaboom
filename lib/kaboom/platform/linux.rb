@@ -1,11 +1,15 @@
 class Boom::Platform
-  class Other < Base
-    def copy item
-      super{'xclip -selection clipboard'}
+  class Linux < Base
+    def copy_command
+      'xclip -selection clipboard'
     end
 
     def open item
-      super{|i| "xdg-open '#{i.url.gsub("\'","'\\\\''")}'" }
+      system "#{open_command} '#{item.url.gsub("\'","'\\\\''")}'"
+    end
+
+    def open_command
+      "xdg-open"
     end
  end
 end
