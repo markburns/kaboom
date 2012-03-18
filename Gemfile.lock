@@ -2,12 +2,16 @@ PATH
   remote: .
   specs:
     kaboom (0.3.2)
+      active_support
       json_pure (~> 1.5.3)
       multi_json (~> 1.0.3)
 
 GEM
   remote: http://rubygems.org/
   specs:
+    active_support (3.0.0)
+      activesupport (= 3.0.0)
+    activesupport (3.0.0)
     json_pure (1.5.4)
       spruz (~> 0.2.8)
     mocha (0.9.12)
