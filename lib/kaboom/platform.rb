@@ -86,11 +86,11 @@ module Boom
       #
       # Returns a String with a helpful message.
       def edit(json_file)
-        unless $EDITOR.nil?
-          unless windows?
-            system("`echo $EDITOR` #{json_file} &")
-          else
+        if $EDITOR
+          if windows?
             system("start %EDITOR% #{json_file}")
+          else
+            system("`echo $EDITOR` #{json_file} &")
           end
         else
           system("#{open_command} #{json_file}")
