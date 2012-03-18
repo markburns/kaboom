@@ -121,11 +121,6 @@ class TestCommand < Test::Unit::TestCase
     assert_match /github is gone forever/, command('urls github delete')
   end
 
-  def test_edit
-    Boom::Platform.stubs(:system).returns('')
-    assert_match 'Make your edits', command('edit')
-  end
-
   def test_help
     assert_match 'boom help', command('help')
     assert_match 'boom help', command('-h')
