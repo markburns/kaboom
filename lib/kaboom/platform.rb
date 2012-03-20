@@ -19,7 +19,7 @@ module Boom
         elsif !!(RUBY_PLATFORM =~ /mswin|mingw/)
           Windows
         else
-          Other
+          Linux
         end
       end
     end
