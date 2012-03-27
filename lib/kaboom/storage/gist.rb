@@ -37,7 +37,7 @@ module Boom
           exit
         end
 
-        unless Boom.config.attributes["gist"]
+        unless Boom.config["gist"]
           puts 'A "gist" data structure must be defined in ~/.boom.conf'
           exit
         end
@@ -64,7 +64,7 @@ module Boom
 
             items.each do |item|
               item.each do |name,value|
-                list.add_item(Item.new(name,value))
+                list.add(Item.new(name,value))
               end
             end
           end
@@ -78,7 +78,7 @@ module Boom
       private
 
       def set_up_auth
-        username, password = Boom.config.attributes["gist"]["username"], Boom.config.attributes["gist"]["password"]
+        username, password = Boom.config["gist"]["username"], Boom.config["gist"]["password"]
 
         if username and password
           self.class.basic_auth(username, password)
@@ -89,8 +89,8 @@ module Boom
       end
 
       def find_or_create_gist
-        @gist_id = Boom.config.attributes["gist"]["gist_id"]
-        @public  = Boom.config.attributes["gist"]["public"] == true
+        @gist_id = Boom.config["gist"]["gist_id"]
+        @public  = Boom.config["gist"]["public"] == true
 
         if @gist_id.nil? or @gist_id.empty?
           response = self.class.post("/gists", request_params)
@@ -106,7 +106,7 @@ module Boom
         end
 
         unless @gist_id
-          Boom.config.attributes["gist"]["gist_id"] = @gist_id = response["id"]
+          Boom.config["gist"]["gist_id"] = @gist_id = response["id"]
           Boom.config.save
         end
       end

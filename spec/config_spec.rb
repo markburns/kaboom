@@ -12,12 +12,12 @@ describe Boom::Config do
 
   it "bootstraps config" do
     @config.bootstrap
-    @config.attributes.should == ({:backend => 'json'})
+    @config.should == ({:backend => 'json'})
   end
 
   it "attributes" do
-    @config.attributes[:wu_tang] = 'clan'
-    @config.attributes[:wu_tang].should == 'clan'
+    @config[:wu_tang] = 'clan'
+    @config[:wu_tang].should == 'clan'
   end
 
 

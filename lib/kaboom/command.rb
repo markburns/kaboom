@@ -25,41 +25,98 @@ module Boom
       #
       # args    - The actual commands to operate on. Can be as few as zero
       #           arguments or as many as three.
+      # Returns output based on method calls.
       def execute(*args)
-        command = check_if_remote args
+        arguments = parse args
+        command = arguments.command
 
-        major   = args.shift
-        minor   = args.empty? ? nil : args.join(' ')
+        return help if(command and [45, "-"].include?(command[0]))
+
+        mapping = { "-v"        => "version",
+                    "--version" => "version",
+                    "version"   => "version",
+                    "echo"      => "echo",
+                    "open"      => "open" ,
+                    "w"         => "echo",
+                    "o"         => "open",
+                    "rand"      => "random",
+                    "r"         => "random",
+                    "all"       => "all",
+                    "edit"      => "edit",
+                    "storage"   => "storage",
+                    "help"      => "help",
+                    "switch"    => "switch"}
+
+        mapped = mapping[command]
+
+        return self.send(mapped, arguments) if mapped
 
         return overview unless command
-        delegate(command, major, minor)
+
+        major, minor = arguments.major, arguments.minor
+
+        if(minor == 'delete') and storage.item_exists?(major)
+          return delete_item(command, major)
+        end
+
+
+        if list = List.find(command)
+          return handle_list list, major, minor
+        end
+
+        if item = Item.find(command)
+          return say_clipboard item
+        end
+
+        create_list command, major, minor
       end
 
+      Arguments = Struct.new :command, :major, :minor
 
-      def check_if_remote args
+      def parse args
         command = args.shift
 
         if command == "remote"
           Boom.use_remote
           command = args.shift
         end
-        command
+
+        major   = args.shift
+        minor   = args.empty? ? nil : args.join(' ')
+
+        minor ||= stdin.read if pipable_input?
+
+        Arguments.new command, major, minor
       end
 
-      private :check_if_remote
+      private :parse
 
-      # Public: gets $stdin.
-      #
-      # Returns the $stdin object. This method exists to help with easy mocking
-      # or overriding.
+      def say_clipboard
+        output "#{cyan("Boom!")} We just copied #{yellow(Platform.copy item)} to your clipboard."
+      end
+
+      def say_set list, key, value
+        output "#{c("Boom!")} #{y(key)} in #{y(list)} is #{y(value)}. Got it."
+      end
+
+      def handle_list list, major, minor
+        return list.delete if major == 'delete'
+        return list.detail unless major
+        return list.find_item major unless minor
+
+        list.add(Item.new(major,minor))
+        say_set list.name, major, minor
+        save
+      end
+
       def stdin
         $stdin
       end
 
-      # Public: prints a tidy overview of your Lists in descending order of
-      # number of Items.
-      #
-      # Returns nothing.
+      def pipable_input?
+        stdin.stat.size > 0
+      end
+
       def overview
         storage.lists.each do |list|
           output "  #{list.name} (#{list.items.size})"
@@ -88,56 +145,10 @@ module Boom
         end
       end
 
-      # Public: allows main access to most commands.
-      #
-      # Returns output based on method calls.
-      def delegate(command, major, minor)
-        return all               if command == 'all'
-        return edit              if command == 'edit'
-        return switch(major)     if command == 'switch'
-        return show_storage      if command == 'storage'
-        return version           if command == "-v"
-        return version           if command == "--version"
-        return help              if command == 'help'
-        return help              if command[0] == 45 || command[0] == '-' # any - dash options are pleas for help
-        return echo(major,minor) if command == 'echo' || command == 'e'
-        return open(major,minor) if command == 'open' || command == 'o'
-        return random(major)     if command == 'random' || command == 'rand' || command == 'r'
-
-        # if we're operating on a List
-        list = command
-        if storage.list_exists?(list)
-          return delete_list(list) if major == 'delete'
-          return detail_list(list) unless major
-          unless minor == 'delete'
-            return add_item(list,major,minor) if minor
-            return add_item(list,major,stdin.read) if stdin.stat.size > 0
-            return search_list_for_item(list, major)
-          end
-        end
-
-        if minor == 'delete' and storage.item_exists?(major)
-          return delete_item(command, major)
-        end
-
-        return search_items(command) if storage.item_exists?(command)
-
-        return create_list(command, major, stdin.read) if !minor && stdin.stat.size > 0
-        return create_list(command, major, minor)
-      end
-
-      # Public: shows the current user's storage.
-      #
-      # Returns nothing.
       def show_storage
-        output "You're currently using #{Boom.config.attributes['backend']}."
+        output "You're currently using #{Boom.config['backend']}."
       end
 
-      # Public: switch to a new backend.
-      #
-      # backend - the String of the backend desired
-      #
-      # Returns nothing.
       def switch(backend)
         Storage.backend = backend
         output "We've switched you over to #{backend}."
@@ -145,19 +156,9 @@ module Boom
         output "We couldn't find that storage engine. Check the name and try again."
       end
 
-      # Public: prints all Items over a List.
-      #
-      # name - the List object to iterate over
-      #
-      # Returns nothing.
-      def detail_list(name)
-        list = List.find(name)
-        list.items.sort{ |x,y| x.name <=> y.name }.each do |item|
-          output "    #{item.short_name}:#{item.spacer} #{item.value}"
-        end
-      end
+      def open arguments
+        key, value = arguments.major, arguments.minor
 
-      def open(key, value)
         if storage.list_exists?(key)
           list = List.find(key)
           if value
@@ -179,11 +180,8 @@ module Boom
         return output "#{yellow(minor)} #{red("not found in")} #{yellow(major)}"
       end
 
-
-      # Public: Opens a random item
-      #
-      # Returns nothing.
-      def random(major)
+      def random arguments
+        major = arguments.major
         if major.nil?
           index = rand(storage.items.size)
           item = storage.items[index]
@@ -194,18 +192,14 @@ module Boom
         else
           output "We couldn't find that list."
         end
-        open(item.name, nil) unless item.nil?
+        open(Argument.new item.name) unless item.nil?
       end
 
-      # Public: echoes only the Item's value without copying
-      #
-      # item_name - the String term to search for in all Item names
-      #
-      # Returns nothing
-      def echo(major, minor)
+      def echo arguments
+        major, minor = arguments.major, arguments.minor
         if minor
-          list = List.find(major)
-          item = list.find_item(minor)
+          list = List.find major
+          item = list.find_item minor
         else
           item = storage.items.detect { |i| i.name == major }
         end
@@ -266,10 +260,9 @@ module Boom
       # Returns the newly created Item.
       def add_item(list,name,value)
         list = List.find(list)
-        list.add_item(Item.new(name,value))
-        output "#{cyan("Boom!")} #{yellow(name)} in #{yellow(list.name)} is #{yellow(value)}. Got it."
-        save
-      end
+        list.add(Item.new(name,value))
+        say_set list.name, name, value
+     end
 
       # Public: remove a named Item.
       #
@@ -295,19 +288,6 @@ module Boom
         end
       end
 
-      # Public: search for an Item in all lists by name. Drops the
-      # corresponding entry into your clipboard.
-      #
-      # name - the String term to search for in all Item names
-      #
-      # Returns the matching Item.
-      def search_items(name)
-        item = storage.items.detect do |item|
-          item.name == name
-        end
-
-        output "#{cyan("Boom!")} We just copied #{yellow(Platform.copy(item))} to your clipboard."
-      end
 
       # Public: search for an Item in a particular list by name. Drops the
       # corresponding entry into your clipboard if found.
@@ -327,12 +307,7 @@ module Boom
         end
       end
 
-      # Public: save in-memory data to disk.
-      #
-      # Returns whether or not data was saved.
-      def save
-        storage.save
-      end
+      delegate :save, :to => :storage
 
       # Public: the version of boom that you're currently running.
       #
@@ -345,10 +320,11 @@ module Boom
       #
       # Returns nothing.
       def edit
+        require 'ruby-debug'; debugger
         if storage.respond_to?("json_file")
           output "#{cyan("Boom!")} #{Platform.edit(storage.json_file)}"
         else
-          output "This storage backend does not store #{cyan("Boom!")} data on your computer"
+          output "This storage backend #{red storage.class} does not store #{cyan("Boom!")} data on your computer"
         end
       end
 
@@ -367,7 +343,7 @@ module Boom
       # Public: prints all the commands of boom.
       #
       # Returns nothing.
-      def help
+      def help(arguments=nil)
         #this currently looks horrible in code, but nice in output.
         #would be good to make it both
 

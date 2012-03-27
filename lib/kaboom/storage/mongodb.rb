@@ -28,13 +28,13 @@ module Boom
       # Returns Mongo connection
       def mongo
         @mongo ||= ::Mongo::Connection.new(
-          Boom.config.attributes["mongodb"]["host"],
-          Boom.config.attributes["mongodb"]["port"]
-        ).db(Boom.config.attributes["mongodb"]["database"])
+          Boom.config["mongodb"]["host"],
+          Boom.config["mongodb"]["port"]
+        ).db(Boom.config["mongodb"]["database"])
 
         @mongo.authenticate(
-          Boom.config.attributes['mongodb']['username'],
-          Boom.config.attributes['mongodb']['password']
+          Boom.config['mongodb']['username'],
+          Boom.config['mongodb']['password']
         )
 
         # Return connection
@@ -47,7 +47,7 @@ module Boom
       #
       # Returns the MongoDB collection
       def collection
-        @collection ||= mongo.collection(Boom.config.attributes["mongodb"]["collection"])
+        @collection ||= mongo.collection(Boom.config["mongodb"]["collection"])
       end
 
       # Public: Bootstrap
@@ -69,7 +69,7 @@ module Boom
 
             items.each do |item|
               item.each do |name,value|
-                list.add_item(Item.new(name,value))
+                list.add(Item.new(name,value))
               end
             end
           end

@@ -28,6 +28,14 @@ module Boom
       @value = value
     end
 
+    def self.find(name)
+      storage.items.detect { |i| i.name == name }
+    end
+
+    def self.storage
+      Boom.storage
+    end
+
     # Public: the shortened String name of the Item. Truncates with ellipses if
     # larger.
     #

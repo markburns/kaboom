@@ -26,8 +26,8 @@ module Boom
       end
 
       def redis
-        @redis ||= ::Redis.new :host => Boom.config.attributes["redis"]["host"],
-                               :port => Boom.config.attributes["redis"]["port"]
+        @redis ||= ::Redis.new :host => Boom.config["redis"]["host"],
+                               :port => Boom.config["redis"]["port"]
       rescue  Exception => exception
         handle exception, "You don't have Redis installed yet:\n  gem install redis"
       end
@@ -47,7 +47,7 @@ module Boom
           shas.each do |item_sha|
             name  = redis.get "boom:items:#{item_sha}:name"
             value = redis.get "boom:items:#{item_sha}:value"
-            list.add_item(Item.new(name, value))
+            list.add(Item.new(name, value))
           end
         end
       end

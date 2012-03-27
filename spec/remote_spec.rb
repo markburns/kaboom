@@ -16,7 +16,7 @@ describe Boom::Remote do
     remote = [Boom::Storage::Gist, Boom::Storage::Mongodb, Boom::Storage::Redis]
 
     (local + remote).all? do |type|
-      Boom::Remote.allowed? dummy(type).should.not == nil
+      Boom::Remote.allowed? dummy(type).should_not be_nil
     end
 
     Boom.use_remote true

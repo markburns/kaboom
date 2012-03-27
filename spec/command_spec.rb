@@ -3,11 +3,11 @@ require 'output_interceptor'
 
 describe Boom::Command do
   before do
-        [Boom::Platform::Darwin, Boom::Platform::Linux,
-      Boom::Platform::Windows].each do |klass|
+    [Boom::Platform::Darwin, Boom::Platform::Linux,
+     Boom::Platform::Windows].each do |klass|
       klass.any_instance.stubs('system')
-    end
-        IO.stubs(:popen)
+     end
+    IO.stub(:popen)
     boom_json :urls
   end
 
@@ -22,30 +22,31 @@ describe Boom::Command do
   it "use remote" do
     response = command('remote the_office fun awesome')
 
-    assert_match /a new list called the_office/, response
-    assert_match /fun in the_office is awesome/, response
+    response.should =~  /a new list called the_office/
+    response.should =~  /fun in the_office is awesome/
   end
 
   it "remote checks for acceptable config" do
     response = command('remote the_office fun awesome')
 
-    assert_match /a new list called the_office/, response
-    assert_match /fun in the_office is awesome/, response
+    response.should =~  /a new list called the_office/
+    response.should =~  /fun in the_office is awesome/
   end
 
   it "overview for empty" do
     storage = Boom::Storage
     storage.stubs(:lists).returns([])
     Boom::Command.stubs(:storage).returns(storage)
-    assert_match /have anything yet!/, command(nil)
+    command(nil).should =~  /have anything yet!/
   end
 
   it "overview" do
+    debugger
     command(nil).should == '  urls (2)'
   end
 
   it "list detail" do
-    assert_match /github/, command('urls')
+    command('urls').should =~  /github/
   end
 
   it "list all" do
@@ -55,11 +56,11 @@ describe Boom::Command do
   end
 
   it "list creation" do
-    assert_match /a new list called newlist/, command('newlist')
+    command('newlist').should =~  /a new list called newlist/
   end
 
   it "list creation with item" do
-    assert_match /a new list called newlist.* item in newlist/, command('newlist item blah')
+    command('newlist item blah').should =~  /a new list called newlist.* item in newlist/
   end
 
   it "list creation with item stdin" do
@@ -67,7 +68,7 @@ describe Boom::Command do
     STDIN.stubs(:stat)
     STDIN.stat.stubs(:size).returns(4)
 
-    assert_match /a new list called newlist.* item in newlist is blah/, command('newlist item')
+    command('newlist item').should =~  /a new list called newlist.* item in newlist is blah/
   end
 
   it "item access" do
@@ -83,15 +84,15 @@ describe Boom::Command do
   end
 
   it "item open item" do
-    assert_match /opened https:\/\/github\.com for you/, command('open github')
+    command('open github').should =~  /opened https:\/\/github\.com for you/
   end
 
   it "item open specific item" do
-    assert_match /opened https:\/\/github\.com for you/, command('open urls github')
+    command('open urls github').should =~  /opened https:\/\/github\.com for you/
   end
 
   it "item open lists" do
-    assert_match /opened all of urls for you/, command('open urls')
+    command('open urls').should =~  /opened all of urls for you/
   end
 
   it "item creation" do
@@ -106,116 +107,114 @@ describe Boom::Command do
 
   it "list deletion no" do
     STDIN.stubs(:gets).returns('n')
-    assert_match /Just kidding then/, command('urls delete')
+    command('urls delete').should =~  /Just kidding then/
   end
 
   it "list deletion yes" do
     STDIN.stubs(:gets).returns('y')
-    assert_match /Deleted all your urls/, command('urls delete')
+    command('urls delete').should =~  /Deleted all your urls/
   end
 
   it "item deletion" do
-    assert_match /github is gone forever/, command('urls github delete')
+    command('urls github delete').should =~  /github is gone forever/
   end
 
   it "help" do
-    assert_match 'boom help', command('help')
-    assert_match 'boom help', command('-h')
-    assert_match 'boom help', command('--help')
+    command('help').should =~  'boom help'
+    command('-h').should =~  'boom help'
+    command('--help').should =~  'boom help'
   end
 
   it "noop options" do
-    assert_match 'boom help', command('--anything')
-    assert_match 'boom help', command('-d')
+    command('--anything').should =~  'boom help'
+    command('-d').should =~  'boom help'
   end
 
   it "nonexistent item access scoped by list" do
-    assert_match /twitter not found in urls/, command('urls twitter')
+    command('urls twitter').should =~  /twitter not found in urls/
   end
 
   it "echo item" do
-    assert_match %r{https://github\.com}, command('echo github')
+    command('echo github').should =~  %r{https://github\.com}
   end
 
   it "echo item shorthand" do
-    assert_match %r{https://github\.com}, command('e github')
+    command('e github').should =~  %r{https://github\.com}
   end
 
   it "echo item does not exist" do
-    assert_match /wrong.*not found/, command('echo wrong')
+    command('echo wrong').should =~  /wrong.*not found/
   end
 
   it "echo list item" do
-    assert_match %r{https://github\.com}, command('echo urls github')
+    command('echo urls github').should =~  %r{https://github\.com}
   end
 
   it "echo list item does not exist" do
-    assert_match /wrong not found in urls/, command('echo urls wrong')
+    command('echo urls wrong').should =~  /wrong not found in urls/
   end
 
   it "show storage" do
     Boom::Config.any_instance.stubs(:attributes).returns('backend' => 'json')
-    assert_match /You're currently using json/, command('storage')
+    command('storage').should =~  /You're currently using json/
   end
 
   it "nonexistant storage switch" do
     Boom::Config.any_instance.stubs(:save).returns(true)
-    assert_match /couldn't find that storage engine/, command('switch dkdkdk')
+    command('switch dkdkdk').should =~  /couldn't find that storage engine/
   end
 
   it "storage switch" do
     Boom::Config.any_instance.stubs(:save).returns(true)
-    assert_match /We've switched you over to redis/, command('switch redis')
+    command('switch redis').should =~  /We've switched you over to redis/
   end
 
   it "version switch" do
-    assert_match /#{Boom::VERSION}/, command('-v')
+    command('-v').should =~  /#{Boom::VERSION}/
   end
 
   it "version long" do
-    assert_match /#{Boom::VERSION}/, command('--version')
+    command('--version').should =~  /#{Boom::VERSION}/
   end
 
   it "stdin pipes" do
-    stub = Object.new
-    stub.stubs(:stat).returns([1,2])
-    stub.stubs(:read).returns("http://twitter.com")
-    Boom::Command.stubs(:stdin).returns(stub)
-    assert_match /twitter in urls/, command('urls twitter')
+    stdin = mock 'stdin', :stat => [1,2], :read => "http://twitter.com"
+    Boom::Command.stub(:stdin).and_return stdin
+    command('urls twitter').should =~  /twitter in urls/
   end
 
   it "random" do
     Boom::Config.any_instance.stubs(:save).returns(true)
-    assert_match /opened .+ for you/, command('random')
+    command('random').should =~  /opened .+ for you/
   end
 
   it "random from list" do
     Boom::Config.any_instance.stubs(:save).returns(true)
-    assert_match /(github|zachholman)/, command('random urls')
+    command('random urls').should =~  /(github|zachholman)/
   end
 
   it "random list not exist" do
     Boom::Config.any_instance.stubs(:save).returns(true)
-    assert_match /couldn't find that list\./, command('random 39jc02jlskjbbac9')
+    command('random 39jc02jlskjbbac9').should =~  /couldn't find that list\./
   end
 
   it "delete item list not exist" do
-    assert_match /couldn't find that list\./, command('urlz github delete')
+    command('urlz github delete').should =~  /couldn't find that list\./
   end
 
   it "delete item wrong list" do
     command('urlz twitter https://twitter.com/')
-    assert_match /github not found in urlz/, command('urlz github delete')
+    command('urlz github delete').should =~  /github not found in urlz/
   end
 
   it "delete item different name" do
     command('foo bar baz')
-    assert_match /bar is gone forever/, command('foo bar delete')
+    command('foo bar delete').should =~  /bar is gone forever/
   end
 
   it "delete item same name" do
     command('duck duck goose')
-    assert_match /duck is gone forever/, command('duck duck delete')
+    command('duck duck delete').should =~  /duck is gone forever/
   end
 
 end

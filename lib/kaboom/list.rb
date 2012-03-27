@@ -12,9 +12,12 @@ module Boom
     # name - The name of the List. Fails if already used.
     #
     # Returns the unpersisted List instance.
-    def initialize(name)
-      @items = []
+    def initialize(name, items=[])
       @name  = name
+
+      @items = items.map do |name, value|
+        Item.new(name,value)
+      end
     end
 
     # Public: accesses the in-memory JSON representation.
@@ -40,10 +43,23 @@ module Boom
     # item - the Item object to associate with this List.
     #
     # Returns the current set of items.
-    def add_item(item)
+    def add(item)
       delete_item(item.name) if find_item(item.name)
       @items << item
     end
+
+
+    # Public: prints all Items over a List.
+    #
+    # name - the List object to iterate over
+    #
+    # Returns nothing.
+    def detail
+      items.sort{ |x,y| x.name <=> y.name }.each do |item|
+        output "    #{item.short_name}:#{item.spacer} #{item.value}"
+      end
+    end
+
 
     # Public: finds any given List by name.
     #
@@ -65,6 +81,14 @@ module Boom
       previous != storage.lists.size
     end
 
+    def delete
+      storage.lists = storage.lists.reject { |list| list.name == name }
+    end
+
+    def storage
+      self.class.storage
+    end
+
     # Public: deletes an Item by name.
     #
     # name - String name of the item to delete
@@ -76,6 +100,8 @@ module Boom
       previous != items.size
     end
 
+    delegate :size, :to => :items
+
     # Public: finds an Item by name. If the name is typically truncated, also
     # allow a search based on that truncated name.
     #
@@ -84,8 +110,7 @@ module Boom
     # Returns the found item
     def find_item(name)
       items.find do |item|
-        item.name == name ||
-        item.short_name.gsub('…','') == name.gsub('…','')
+        item.name == name || item.short_name.gsub('…','') == name.gsub('…','')
       end
     end
 

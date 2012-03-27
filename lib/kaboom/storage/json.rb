@@ -15,7 +15,6 @@ module Boom
       #
       # Returns the String path of boom's Json representation.
       def json_file
-
         JSON_FILE
       end
 
@@ -42,15 +41,7 @@ module Boom
         storage = MultiJson.decode(File.new(json_file, 'r').read)
 
         storage['lists'].each do |lists|
-          lists.each do |list_name, items|
-            @lists << list = List.new(list_name)
-
-            items.each do |item|
-              item.each do |name,value|
-                list.add_item(Item.new(name,value))
-              end
-            end
-          end
+          @lists = lists.map { |name, items| List.new(name, items) }
         end
       end
 

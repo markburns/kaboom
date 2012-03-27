@@ -43,7 +43,7 @@ module Boom
         stored_keychain_lists.each do |keychain|
           @lists << list = List.new(keychain.scan(KEYCHAIN_FORMAT).flatten.first)
           extract_keychain_items(keychain).each do |name|
-            list.add_item(Item.new(name, extract_keychain_value(name, keychain)))
+            list.add(Item.new(name, extract_keychain_value(name, keychain)))
           end
         end
       end

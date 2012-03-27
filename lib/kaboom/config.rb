@@ -6,11 +6,11 @@
 # as a Hash:
 #
 #     config.attributes = { :backend => "JSON" }
-#     config.attributes[:backend]
+#     config[:backend]
 #     # => "json"
 #
-#     config.attributes[:backend] = "Redis"
-#     config.attributes[:backend]
+#     config[:backend] = "Redis"
+#     config[:backend]
 #     # => "redis"
 #
 module Boom
@@ -36,6 +36,10 @@ module Boom
     # Returns the value in the attributes hash
     def [] key
       attributes[key]
+    end
+
+    def []= key, value
+      attributes[key] = value
     end
 
     # Public: creates a new instance of Config.
@@ -100,17 +104,5 @@ module Boom
       File.open(file, 'w') {|f| f.write(json) }
     end
 
-    def invalid_message
-      %(#{red "Is your config correct? You said:"}
-
-      #{File.read Boom.config.file}
-
-      #{cyan "Our survey says:"}
-
-      #{self.class.sample_config}
-
-      #{yellow "Go edit "} #{Boom.config.file +  yellow(" and make it all better") }
-      ).gsub(/^ {8}/, '') # strip the first eight spaces of every line
-    end
   end
 end

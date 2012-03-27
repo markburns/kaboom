@@ -18,7 +18,7 @@ module Boom
         populate
       end
 
-      # run bootstrap tasks for the storage
+     # run bootstrap tasks for the storage
       def bootstrap ; end
 
       # populate the in-memory store with all the lists and items
@@ -41,15 +41,10 @@ module Boom
       #
       # Returns an Array of List objects.
       def lists
-        @lists.sort_by { |list| -list.items.size }
+        @lists.sort_by { |list| -list.size }
       end
 
-      # Public: tests whether a named List exists.
-      #
-      # name - the String name of a List
-      #
-      # Returns true if found, false if not.
-      def list_exists?(name)
+      def find_list(name)
         @lists.detect { |list| list.name == name }
       end
 
@@ -81,11 +76,26 @@ module Boom
       def handle error, message
         case error
         when NoMethodError
-          output cyan config_text
+          output invalid_config_message
         when NameError
           output message
         end
+        exit -1
       end
+
+      def invalid_config_message
+        %(#{red "Is your config correct? You said:"}
+
+        #{File.read Boom.config.file}
+
+        #{cyan "Our survey says:"}
+
+        #{self.class.sample_config}
+
+        #{yellow "Go edit "} #{Boom.config.file +  yellow(" and make it all better") }
+        ).gsub(/^ {8}/, '') # strip the first eight spaces of every line
+      end
+
     end
   end
 end

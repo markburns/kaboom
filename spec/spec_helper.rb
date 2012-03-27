@@ -17,9 +17,8 @@ require 'kaboom'
 
 def boom_json(name)
   root = File.expand_path(File.dirname(__FILE__))
-  Boom::Storage::Json.any_instance.stubs(:save).returns(true)
-  Boom::Storage::Json.any_instance.stubs(:json_file).
-    returns("#{root}/examples/#{name}.json")
+  Boom::Storage::Json.any_instance.stub(:save).and_return(true)
+  Boom::Storage::Json.any_instance.stub(:json_file).and_return("#{root}/examples/#{name}.json")
   Boom.use_remote false
-  Boom.stubs(:storage).returns(Boom::Storage::Json.new)
+  Boom.stub(:storage).and_return Boom::Storage::Json.new
 end

@@ -2,28 +2,24 @@ require File.expand_path('spec/spec_helper')
 
 describe Boom::Color do
   it "colorize" do
-    assert_equal "\e[35mBoom!\e[0m",
-      Boom::Color.colorize("Boom!", :magenta)
+    Boom::Color.colorize("Boom!", :magenta).should =="\e[35mBoom!\e[0m"
   end
 
   it "magenta" do
-    assert_equal "\e[35mMagenta!\e[0m",
-      Boom::Color.magenta("Magenta!")
+    Boom::Color.magenta("Magenta!").should == "\e[35mMagenta!\e[0m"
   end
 
   it "red" do
-    assert_equal "\e[31mRed!\e[0m",
-      Boom::Color.red("Red!")
+    Boom::Color.red("Red!").should == "\e[31mRed!\e[0m"
   end
 
   it "yellow" do
-    assert_equal "\e[33mYellow!\e[0m",
-      Boom::Color.yellow("Yellow!")
+    Boom::Color.yellow("Yellow!").should == "\e[33mYellow!\e[0m"
   end
 
   it "cyan" do
-    assert_equal "\e[36mCyan!\e[0m",
-      Boom::Color.cyan("Cyan!")
+
+    Boom::Color.cyan("Cyan!").should == "\e[36mCyan!\e[0m"
   end
 
 end
